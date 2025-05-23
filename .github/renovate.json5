@@ -1,0 +1,10 @@
+{
+    extends: [
+        'config:recommended',
+        'config:semverAllMonthly',
+        ':configMigration',
+        ':disableRateLimiting',
+    ],
+    additionalBranchPrefix: '{{datasource}}-',
+    commitMessagePrefix: '[{{datasource}}]',
+}
