@@ -80,19 +80,24 @@ Result waitForConnection() {
 
 int main(int argc, char* argv[]) {
     Result rc;
-    uint64_t timestamp;
+    uint64_t ntpTime;
+    uint64_t now;
+    uint64_t lastUpdate = 0;
 
     while (true) {
         rc = waitForConnection();
         if (R_SUCCEEDED(rc)) {
-            rc = getNtpTime(&timestamp);
+            rc = getNtpTime(&ntpTime);
             if (R_SUCCEEDED(rc)) {
-                timeSetCurrentTime(TimeType_NetworkSystemClock, timestamp);
-                svcSleepThread(3 * 24 * 60 * 60 * 1e9);
-                continue;
+                timeSetCurrentTime(TimeType_NetworkSystemClock, ntpTime);
+                lastUpdate = ntpTime;
             }
         }
-        svcSleepThread(1 * 60 * 60 * 1e9);
+
+        do {
+            svcSleepThread(1 * 60 * 60 * 1e9);
+            timeGetCurrentTime(TimeType_NetworkSystemClock, &now);
+        } while (now - lastUpdate < 3 * 24 * 60 * 60);
     }
 
     return 0;

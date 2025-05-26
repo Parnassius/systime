@@ -113,7 +113,7 @@ Result FetchNTP_Packet(struct NTP_Packet* pkt, const char* const server, const c
     return 0;
 }
 
-Result getNtpTime(uint64_t *timestamp) {
+Result getNtpTime(uint64_t *ntpTime) {
     Result rc;
 
     const char* server = "pool.ntp.org";
@@ -132,7 +132,7 @@ Result getNtpTime(uint64_t *timestamp) {
 
     rc = FetchNTP_Packet(&pkt, server, port);
     if (R_SUCCEEDED(rc)) {
-        *timestamp = pkt.t_transmit.sec - FirstDayOfNTP;
+        *ntpTime = pkt.t_transmit.sec - FirstDayOfNTP;
     }
 
     return rc;
