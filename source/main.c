@@ -2,11 +2,26 @@
 
 #include "ntp.h"
 
-#define INNER_HEAP_SIZE 0x300000
+#define INNER_HEAP_SIZE 0x10000
 
 u32 __nx_applet_type = AppletType_None;
 
 TimeServiceType __nx_time_service_type = TimeServiceType_System;
+
+static const SocketInitConfig socketInitConfig = {
+    .tcp_tx_buf_size = 0,
+    .tcp_rx_buf_size = 0,
+    .tcp_tx_buf_max_size = 0,
+    .tcp_rx_buf_max_size = 0,
+
+    .udp_tx_buf_size = 0x30,
+    .udp_rx_buf_size = 0xA500,
+
+    .sb_efficiency = 1,
+
+    .num_bsd_sessions = 0,
+    .bsd_service_type = BsdServiceType_Auto,
+};
 
 void __libnx_init_time(void);
 
@@ -42,7 +57,7 @@ void __appInit(void) {
         diagAbortWithResult(MAKERESULT(Module_Libnx, LibnxError_InitFail_Time));
     }
 
-    rc = socketInitializeDefault();
+    rc = socketInitialize(&socketInitConfig);
     if (R_FAILED(rc)) {
         diagAbortWithResult(MAKERESULT(Module_Libnx, LibnxError_InitFail_Time));
     }
