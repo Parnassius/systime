@@ -57,9 +57,9 @@ Result FetchNTP_Packet(struct NTP_Packet* pkt, const char* const server, const c
     }
 
     /* getaddrinfo() returns a list of address structures.
-     T ry each *address until we successfully connect(2).
-     If socket(2) (or connect(2)) fails, we (close the socket)
-     and try the next address. */
+     * Try each *address until we successfully connect(2).
+     * If socket(2) (or connect(2)) fails, we (close the socket)
+     * and try the next address. */
 
     struct addrinfo* rp = NULL;
     int SocketFD = -1;
